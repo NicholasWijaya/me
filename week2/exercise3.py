@@ -7,7 +7,7 @@ def is_odd(a_number):
 
     Look into modulo division using the '%' operator as one way of doing this.
     """
-    return None
+    return a_number % 2 != 0
 
 
 def fix_it(moves=True, should_move=True):
@@ -25,7 +25,14 @@ def fix_it(moves=True, should_move=True):
     Most people write this function with 4 return statements. 
     As an extra challenge, see if you can get that down to three.
     """
-    return None
+    if (moves == True and should_move == False):
+            answer_2 = "Duct Tape"
+    elif (moves == False and should_move == True):
+            answer_2 = "WD-40"   
+    else:
+        answer_2 = "No Problem"
+                        
+    return answer_2
 
 
 def loops_1a():
@@ -35,7 +42,11 @@ def loops_1a():
     return a list of 10 items, each one a string with exacly one star in it.
     E.g.: ['*', '*', '*', '*', '*', '*', '*', '*', '*', '*']
     """
-    return None
+    answer_3 = []
+    for i in range(10):
+        answer_3.append('*')
+
+    return answer_3
 
 
 def loops_1c(number_of_items=5, symbol="#"):
@@ -45,7 +56,8 @@ def loops_1c(number_of_items=5, symbol="#"):
     string with exacly one symbol in it.
     E.g.: ['#', '#', '#', '#', '#']
     """
-    return None
+    
+    return [symbol]*number_of_items
 
 
 def loops_2():
@@ -66,7 +78,11 @@ def loops_2():
             ['*', '*', '*', '*', '*', '*', '*', '*', '*', '*'],
           ]
     """
-    return None
+    answer_5 = []
+    for i in range(10):
+        answer_5.append(['*']*10)
+        
+    return answer_5
 
 
 def loops_3():
@@ -90,7 +106,11 @@ def loops_3():
     TIP: notice that this needs to to return strings of numbers,
          so call str(number) to cast.
     """
-    return None
+    answer_6= []
+    for i in range(10):
+        answer_6.append([str(i)]*10)
+        
+    return answer_6
 
 
 def loops_4():
@@ -110,7 +130,12 @@ def loops_4():
       ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9']
     ]
     """
-    return None
+    answer_7 = []
+    for i in range(10):
+        answer_7.append(str(i))
+    answer_7 = 10*[answer_7]
+    
+    return answer_7
 
 
 def loops_5():
@@ -137,7 +162,13 @@ def loops_5():
         "There are {} green bottles".format(8)
     you'll come to see the pros and cons of each over time.
     """
-    return None
+    answer_8 = []
+    for i in range(10):
+        for j in range(5):
+            answer_8.append('(i' + str(i) + ', ' + 'j' + str(j) + ')')
+    answer_8 = [answer_8[x:x+5] for x in range(0,len(answer_8),5)]
+             
+    return answer_8
 
 
 def loops_6():
@@ -160,7 +191,13 @@ def loops_6():
     You can use a variable.
     TIP: look out for the starting condition.
     """
-    return None
+    temp = list(range(10))
+    temp = list(map(str,temp))
+    answer_9 = []
+    for x in range(1,11):
+        answer_9.append(temp[0:x])
+
+    return answer_9
 
 
 def loops_7():
@@ -184,7 +221,12 @@ def loops_7():
     This is a hard problem. Use lots of experimentation and draw
     lots of diagrams!
     """
-    return None
+    answer_10=[]
+    for i in range(5):
+      answer_10.append([' ']*9)
+      answer_10[i][(4-i):(5+i)]= '*' * (2*i+1)    
+
+    return answer_10
 
 
 def lp(some_kind_of_list, exercise_name):
@@ -216,15 +258,15 @@ if __name__ == "__main__":
     # code is robust to the situations that you'll see in action.
     print(is_odd(1), "is_odd odd")
     print(is_odd(4), "is_odd even")
-    print(fix_it(True, True), "fix_it")
-    print(fix_it(True, False), "fix_it")
-    print(fix_it(False, True), "fix_it")
-    print(fix_it(False, False), "fix_it")
-    lp(loops_1a(), "loops_1a")
-    lp(loops_1c(4, "×°×"), "loops_1c")
-    lp(loops_2(), "loops_2")
-    lp(loops_3(), "loops_3")
-    lp(loops_4(), "loops_4")
-    lp(loops_5(), "loops_5")
-    lp(loops_6(), "loops_6")
-    lp(loops_7(), "loops_7")
+    print(fix_it(True, True), "fix_it NP")
+    print(fix_it(True, False), "fix_it DT")
+    print(fix_it(False, True), "fix_it WD")
+    print(fix_it(False, False), "fix_it NP")
+    lp(loops_1a(), "loops_1a 10stars")
+    lp(loops_1c(4, "×°×"), "loops_1c repeat4")
+    lp(loops_2(), "loops_2 10x10star")
+    lp(loops_3(), "loops_3 risingdownnumblock")
+    lp(loops_4(), "loops_4 risingsidenumblock")
+    lp(loops_5(), "loops_5 blockcoordinates")
+    lp(loops_6(), "loops_6 numwedge")
+    lp(loops_7(), "loops_7 pyramid")
