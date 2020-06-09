@@ -221,10 +221,13 @@ def loops_7():
     This is a hard problem. Use lots of experimentation and draw
     lots of diagrams!
     """
-    answer_10=[]
-    for i in range(5):
-      answer_10.append([' ']*9)
-      answer_10[i][(4-i):(5+i)]= '*' * (2*i+1)    
+    answer_10 = []
+    height = 5
+    width = 9
+    midpoint = (width+1)/2
+    for i in range(height):
+      answer_10.append([' ']*width)
+      answer_10[i][int(midpoint-1-i):int(midpoint+i)] = '*' * (2*i+1)    
 
     return answer_10
 
