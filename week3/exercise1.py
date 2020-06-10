@@ -12,7 +12,12 @@ def loop_ranger(start, stop=None, step=1):
     The look up the docs for range(), you can answer this with just the range 
     function, but we'd like you to do it the long way, probably using a loop.
     """
-    return None
+    numlist0 = []
+    loop = 0
+    while loop <= int((stop-start-1)/step):     #-1 because excluding stop number, just like in range()
+        numlist0.append(start+step*loop)
+        loop += 1
+    return numlist0
 
 
 def lone_ranger(start, stop, step):
@@ -20,7 +25,8 @@ def lone_ranger(start, stop, step):
 
     Look up the docs for range() and wrap it in a 1:1 way
     """
-    return None
+
+    return list(range(start,stop,step))
 
 
 def two_step_ranger(start, stop):
@@ -29,7 +35,13 @@ def two_step_ranger(start, stop):
     Sometimes you want to hide complexity.
     Make a range function that always has a step size of 2
     """
-    return None
+    step = 2
+    loop = 0
+    numlist2 = []
+    while loop <= int((stop-start-1)/step):        #-1 because excluding stop number, just like in range()
+        numlist2.append(start+step*loop)
+        loop += 1
+    return numlist2
 
 
 def stubborn_asker(low, high):
@@ -40,7 +52,16 @@ def stubborn_asker(low, high):
 
     Look up the docs for input
     """
-    return None
+    counter = 0
+    while counter < 1:
+        numinput0 = float(input('Please enter a number:'))
+
+        if numinput0 < low or numinput0 > high:
+            print('Number out of bounds!')
+        else:
+            break
+                    
+    return numinput0
 
 
 def not_number_rejector(message):
@@ -50,7 +71,18 @@ def not_number_rejector(message):
     (e.g. "cow", "six", "8!") then throw it out and ask for an actual number.
     When you do get a number, return it.
     """
-    return None
+    counter = 0
+    while counter < 1:
+        numinput1 = input(message)
+
+        try:
+          float(numinput1)
+        except:
+          print('! Only numbers are accepted !')
+          continue
+
+        break
+    return numinput1
 
 
 def super_asker(low, high):
@@ -61,7 +93,17 @@ def super_asker(low, high):
     Try to call at least one of the other functions to minimise the
     amount of code.
     """
-    return None
+    counter = 0
+    while counter < 1:
+        numinput2 = float(not_number_rejector('Please enter a number: '))
+        
+        if numinput2 < low or numinput2 > high:
+            print('Number out of bounds!')
+        else:
+            break
+    
+    
+    return numinput2
 
 
 if __name__ == "__main__":
