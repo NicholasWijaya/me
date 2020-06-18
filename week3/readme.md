@@ -1,6 +1,9 @@
 TODO: Reflect on what you learned this week and what is still unclear.
 
-check ex3 (why tests.py comes out wrong?)
+ISSUE: ex 4
+
+
+
 
 var += number   : adds number to var, then returns the total back to var (same as var = var + number)
 

@@ -4,7 +4,6 @@ Steps on the way to making your own guessing game.
 """
 
 import random
-import sys
 
 def not_number_rejector(message):
     """Ask for a number repeatedly until actually given one.
@@ -13,40 +12,33 @@ def not_number_rejector(message):
     (e.g. "cow", "six", "8!") then throw it out and ask for an actual number.
     When you do get a number, return it.
     """
-    counter = 0
-    while counter < 1:
-        input_to_check = input(message)
+    while True:
         
-        if input_to_check == 'end':   #'end' is keyword to end the running program
-            sys.exit('******************program ended******************')
-        
-        abs_input = input_to_check.lstrip('-')    #remove '-' when testing negative numbers
-        if abs_input.isdigit() == False:    #test if input is integer type
-            print('! Only integers allowed !')
-            continue
-        else:
-            break
-                
-    return int(input_to_check)
+        try:
+            input_to_check = int(input(message))
+            return input_to_check        
+        except ValueError:
+            print('! Only integers allowed !')    
+                  
 
 def boundary_validator():
-    counter = 0
-    while counter < 1:
+    """Checks that lower bound < upper bound
+    """
+    while True:
         lower_bound = not_number_rejector('Please enter a lower bound: ')
         upper_bound = not_number_rejector('Please enter an upper bound: ')
 
-        if lower_bound >= upper_bound:   #check that lower bound is less than upper bound
-            print('! Upper bound must be greater than lower bound !')
-            continue  
+        if lower_bound > upper_bound:   #check that lower bound is less than upper bound
+            print('! Upper bound must be greater than lower bound !')  
         else:
-            break 
+            return lower_bound, upper_bound
+            
 
-    return lower_bound, upper_bound
 
 def guess_checker(guess_this_number,lower_bound,upper_bound):
-    guessed = False
-
-    while not guessed:
+    """Check if guess is within boundaries. Also, guides player to the correct value.
+    """
+    while True:
         user_guess = not_number_rejector('Please enter a guess: ')
         if lower_bound <= user_guess <= upper_bound:
             if user_guess < guess_this_number:
@@ -54,12 +46,11 @@ def guess_checker(guess_this_number,lower_bound,upper_bound):
             elif user_guess > guess_this_number:
                 print('! Your guess is too high !')
             else:
-                guessed = True
+                return
         else:
             print('! Your guess is out of bounds !')
-            continue
     
-    return guessed
+    
 
 def advancedGuessingGame():
     """Play a guessing game with a user.
