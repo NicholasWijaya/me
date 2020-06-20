@@ -28,7 +28,7 @@ def binary_search(low, high, actual_number):
     low_bound = low
     high_bound = high
     while True:
-        tries += 1
+        
         guess = int((low_bound + high_bound)/2)
         print(guess)
         if guess == actual_number:
@@ -37,6 +37,7 @@ def binary_search(low, high, actual_number):
             low_bound = guess + 1
         else:
             high_bound = guess - 1
+        tries += 1
 
 
 if __name__ == "__main__":
