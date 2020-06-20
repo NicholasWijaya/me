@@ -1,9 +1,5 @@
 TODO: Reflect on what you learned this week and what is still unclear.
 
-ISSUE: ex 4
-
-
-
 
 var += number   : adds number to var, then returns the total back to var (same as var = var + number)
 
