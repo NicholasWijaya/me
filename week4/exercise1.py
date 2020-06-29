@@ -34,18 +34,19 @@ def get_some_details():
          dictionaries.
     """
     json_data = open(LOCAL + "/lazyduck.json").read()
-
     data = json.loads(json_data)
-    return {"lastName": None, "password": None, "postcodePlusID": None}
+
+    lastName = data['results'][0]['name']['last']
+    password = data['results'][0]['login']['password']
+    postcodePlusID = int(data['results'][0]['location']['postcode']) + int(data['results'][0]['id']['value'])
+    return {"lastName": lastName, "password": password, "postcodePlusID": postcodePlusID}
 
 
 def wordy_pyramid():
     """Make a pyramid out of real words.
-
     There is a random word generator here:
-    http://api.wordnik.com/v4/words.json/randomWords?api_key=a2a73e7b926c924fad7001ca3111acd55af2ffabf50eb4ae5&minLength=10&maxLength=10&limit=1
-    The arguments that the generator takes is the minLength and maxLength of the word
-    as well as the limit, which is the the number of words. 
+    https://us-central1-waldenpondpress.cloudfunctions.net/give_me_a_word?wordlength=20
+    The generator takes a single argument, length (`wordlength`) of the word.
     Visit the above link as an example.
     Use this and the requests library to make a word pyramid. The shortest
     words they have are 3 letters long and the longest are 20. The pyramid
@@ -72,9 +73,23 @@ def wordy_pyramid():
     "Nereis",
     "Leto",
     ]
-    TIP: to add an argument to a URL, use: ?argName=argVal e.g. &minLength=
+    TIP: to add an argument to a URL, use: ?argName=argVal e.g. &wordlength=
     """
-    pass
+
+    baseLength = 3
+    peakLength = 20
+    step = 2
+    wordLength = baseLength
+    pyramid = []
+    url = 'https://us-central1-waldenpondpress.cloudfunctions.net/give_me_a_word?wordlength={wordLength}'
+    listLength = list(range(baseLength,peakLength,step)) + list(range(peakLength,baseLength,step*-1))    #lists lengths of each word  the pyramid in order
+    
+    for wordLength in listLength:
+        r = requests.get(url.format(wordLength=wordLength))
+        while not r:    #keep calling until good response
+            r = requests.get(url.format(wordLength=wordLength))
+        pyramid.append(r.text)
+    return pyramid
 
 
 def pokedex(low=1, high=5):
@@ -92,12 +107,22 @@ def pokedex(low=1, high=5):
          variable and then future access will be easier.
     """
     template = "https://pokeapi.co/api/v2/pokemon/{id}"
+    height = 0  #initial value of tallest height
 
-    url = template.format(id=5)
-    r = requests.get(url)
-    if r.status_code is 200:
+    for idValue in range(low,high+1):
+        url = template.format(id = idValue)
+        r = requests.get(url)
+
+        while not r:    #keep calling until good response
+            r = requests.get(url)
+        
         the_json = json.loads(r.text)
-    return {"name": None, "weight": None, "height": None}
+        if height < the_json['height']:    #replace recorded dict with the taller pokemon
+            height = the_json['height']
+            name = the_json['forms'][0]['name']
+            weight = the_json['weight']
+
+    return {"name": name, "weight": weight, "height": height}
 
 
 def diarist():
@@ -114,7 +139,17 @@ def diarist():
          the test will have nothing to look at.
     TIP: this might come in handy if you need to hack a 3d print file in the future.
     """
-    pass
+    switchCount = 0
+    with open('D:/code1161/me/week4/Trispokedovetiles(laser).gcode','r') as gcode:
+        for line in gcode:
+            if "M10 P1" in line:
+                switchCount += 1
+            
+    with open('D:/code1161/me/week4/lasers.pew','w') as lasers:
+        lasers.write(str(switchCount))
+        lasers.close()
+    
+    return switchCount
 
 
 if __name__ == "__main__":
