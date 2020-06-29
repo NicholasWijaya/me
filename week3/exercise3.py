@@ -4,6 +4,7 @@ Steps on the way to making your own guessing game.
 """
 
 import random
+import sys
 
 def not_number_rejector(message):
     """Ask for a number repeatedly until actually given one.
@@ -14,11 +15,15 @@ def not_number_rejector(message):
     """
     while True:
         
-        try:
-            input_to_check = int(input(message))
-            return input_to_check        
-        except ValueError:
-            print('! Only integers allowed !')    
+        input_to_check = input(message)
+        if input_to_check == "end":
+            sys.exit('***Program has ended***')
+        else:
+            try:
+                input_to_check = int(input_to_check)
+                return input_to_check        
+            except ValueError:
+                print('! Only integers allowed !')     
                   
 
 def boundary_validator():
