@@ -112,15 +112,13 @@ def pokedex(low=1, high=5):
     for idValue in range(low,high+1):
         url = template.format(id = idValue)
         r = requests.get(url)
-
-        while not r:    #keep calling until good response
-            r = requests.get(url)
         
-        the_json = json.loads(r.text)
-        if height < the_json['height']:    #replace recorded dict with the taller pokemon
-            height = the_json['height']
-            name = the_json['forms'][0]['name']
-            weight = the_json['weight']
+        if r.text != 'Not Found':        
+            the_json = json.loads(r.text)        
+            if height < the_json['height']:    #replace recorded dict with the taller pokemon
+                height = the_json['height']
+                name = the_json['forms'][0]['name']
+                weight = the_json['weight']
 
     return {"name": name, "weight": weight, "height": height}
 
