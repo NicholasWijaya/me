@@ -113,7 +113,7 @@ def pokedex(low=1, high=5):
         url = template.format(id = idValue)
         r = requests.get(url)
         
-        if r.text != 'Not Found':        
+        if r:        
             the_json = json.loads(r.text)        
             if height < the_json['height']:    #replace recorded dict with the taller pokemon
                 height = the_json['height']
