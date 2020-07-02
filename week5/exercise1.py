@@ -46,10 +46,16 @@ def do_bunch_of_bad_things():
     print(yet_another_hyp)
 
 
+
 # return a list of countdown messages, much like in the bad function above.
 # It should say something different in the last message.
 def countdown(message, start, stop, completion_message):
-    pass
+    countList = []
+    for count in range(start,stop-1,-1):
+        countList.append(message + " {}".format(count))
+    countList.append(completion_message)  
+    return countList
+
 
 
 # TRIANGLES
@@ -61,33 +67,42 @@ def countdown(message, start, stop, completion_message):
 # turned off by default but turned on with an optional argument.
 # The stub functions are made for you, and each one is tested, so this should
 # hand hold quite nicely.
+
 def calculate_hypotenuse(base, height):
-    pass
+    hypotenuse = ( base**2 + height**2 )**0.5
+    return hypotenuse
 
 
 def calculate_area(base, height):
-    pass
+    area = base * height / 2
+    return area
 
 
 def calculate_perimeter(base, height):
-    pass
+    perimeter = base + height + ( base**2 + height**2 )**0.5
+    return perimeter
 
 
 def calculate_aspect(base, height):
-    pass
+    if height > base:
+        return "tall"
+    elif height < base:
+        return "wide"
+    elif height == base:
+        return "equal"    
 
 
 # Make sure you reuse the functions you've already got
 # Don't reinvent the wheel
 def get_triangle_facts(base, height, units="mm"):
     return {
-        "area": None,
-        "perimeter": None,
-        "height": None,
-        "base": None,
-        "hypotenuse": None,
-        "aspect": None,
-        "units": None,
+        "area": calculate_area(base,height),
+        "perimeter": calculate_perimeter(base,height),
+        "height": height,
+        "base": base,
+        "hypotenuse": calculate_hypotenuse(base,height),
+        "aspect": calculate_aspect(base,height),
+        "units": units
     }
 
 
@@ -108,46 +123,59 @@ def get_triangle_facts(base, height, units="mm"):
 # but with the values and shape that relate to the specific
 # triangle we care about.
 def tell_me_about_this_right_triangle(facts_dictionary):
-    tall = """
+    triangleType ={
+    "tall" : """
             {height}
             |
             |     |\\
             |____>| \\  {hypotenuse}
-                  |  \\
-                  |   \\
-                  ------
-                  {base}"""
-    wide = """
+                |  \\
+                |   \\
+                ------
+                {base}""", 
+    "wide" : """
             {hypotenuse}
-             ↓         ∕ |
-                   ∕     | <-{height}
-               ∕         |
+            ↓         ∕ |
+                ∕     | <-{height}
+            ∕         |
             ∕------------|
-              {base}"""
-    equal = """
+            {base}""", 
+    "equal" : """
             {height}
             |
             |     |⋱
             |____>|  ⋱ <-{hypotenuse}
-                  |____⋱
-                  {base}"""
-
+                |____⋱
+                {base}"""
+    }
+    
     pattern = (
-        "This triangle is {area}{units}²\n"
-        "It has a perimeter of {perimeter}{units}\n"
-        "This is a {aspect} triangle.\n"
+    "This triangle is {area}{units}²\n"
+    "It has a perimeter of {perimeter}{units}\n"
+    "This is a {aspect} triangle.\n"
     )
 
-    facts = pattern.format(**facts_dictionary)
+    diagram = (triangleType[facts_dictionary["aspect"]] + "\n" + pattern)   #join the diagram and facts
+    diagram = diagram.format(**facts_dictionary)
+
+    return diagram
 
 
 def triangle_master(base, height, return_diagram=False, return_dictionary=False):
+    
+    facts_dictionary = get_triangle_facts(height,base)
+    diagram = tell_me_about_this_right_triangle(facts_dictionary)
+  
     if return_diagram and return_dictionary:
-        return None
+        print(facts_dictionary)
+        print(diagram)
+        return {"facts_dictionary": facts_dictionary, "diagram": diagram}
     elif return_diagram:
-        return None
+        print(diagram)
+        return diagram
     elif return_dictionary:
-        return None
+        print(facts_dictionary)
+        return facts_dictionary
     else:
         print("You're an odd one, you don't want anything!")
 
@@ -162,32 +190,62 @@ def wordy_pyramid(api_key):
         "&maxLength={length}"
         "&limit=1"
     )
+    
+    pyramid_slope = [up for up in range(3,21,2)]
+    lengths = pyramid_slope + list(reversed(pyramid_slope)) #mirror pyramid_slope
     pyramid_list = []
-    for i in range(3, 21, 2):
-        url = baseURL.format(api_key="", length=i)
-        r = requests.get(url)
+
+    for length in lengths:
+        r = requests.get(baseURL.format(api_key=api_key,length=length))
         if r.status_code is 200:
             message = r.json()[0]["word"]
             pyramid_list.append(message)
         else:
-            print("failed a request", r.status_code, i)
-    for i in range(20, 3, -2):
-        url = baseURL.format(api_key="", length=i)
-        r = requests.get(url)
-        if r.status_code is 200:
-            message = r.json()[0]["word"]
-            pyramid_list.append(message)
-        else:
-            print("failed a request", r.status_code, i)
+            print("failed a request", r.status_code, length)
+
     return pyramid_list
 
 
 def get_a_word_of_length_n(length):
-    pass
+    import requests
+
+    url = (
+        "http://api.wordnik.com/v4/words.json/randomWords?"
+        "api_key=a2a73e7b926c924fad7001ca3111acd55af2ffabf50eb4ae5"
+        "&minLength={length}"
+        "&maxLength={length}"
+        "&limit=1".format(length=length)
+    )
+    r = requests.get(url)
+    try:
+        length = int(length)
+    except ValueError:
+        return None
+    
+    if 3 <= length <= 20:
+        if r.status_code is 200:
+            message = r.json()[0]["word"]
+            return message
+    
 
 
 def list_of_words_with_lengths(list_of_lengths):
-    pass
+    import requests
+
+    url = (
+        "http://api.wordnik.com/v4/words.json/randomWords?"
+        "api_key=a2a73e7b926c924fad7001ca3111acd55af2ffabf50eb4ae5"
+        "&minLength={length}"
+        "&maxLength={length}"
+        "&limit=1"
+    )
+    wordList = []
+    for i in range(0,len(list_of_lengths)-1):
+        length = list_of_lengths[i]
+        r = requests.get(url.format(length=length))
+        message = r.json()[0]["word"]
+        wordList.append(message)
+    return wordList
 
 
 if __name__ == "__main__":
