@@ -50,11 +50,10 @@ def do_bunch_of_bad_things():
 # return a list of countdown messages, much like in the bad function above.
 # It should say something different in the last message.
 def countdown(message, start, stop, completion_message):
-    countList = []
     for count in range(start,stop-1,-1):
-        countList.append(message + " {}".format(count))
-    countList.append(completion_message)  
-    return countList
+        print(message + " {}".format(count))
+    print(completion_message)  
+    pass
 
 
 
@@ -129,23 +128,23 @@ def tell_me_about_this_right_triangle(facts_dictionary):
             |
             |     |\\
             |____>| \\  {hypotenuse}
-                |  \\
-                |   \\
-                ------
+                  |  \\
+                  |   \\
+                  ------
                 {base}""", 
     "wide" : """
             {hypotenuse}
-            ↓         ∕ |
-                ∕     | <-{height}
-            ∕         |
-            ∕------------|
+            ↓     ∕ |
+                ∕   | <-{height}
+              ∕     |
+            ∕-------|
             {base}""", 
     "equal" : """
             {height}
             |
             |     |⋱
             |____>|  ⋱ <-{hypotenuse}
-                |____⋱
+                  |____⋱
                 {base}"""
     }
     
@@ -183,19 +182,8 @@ def triangle_master(base, height, return_diagram=False, return_dictionary=False)
 def wordy_pyramid():
     import requests
 
-    baseURL = "https://us-central1-waldenpondpress.cloudfunctions.net/give_me_a_word?wordlength={length}"
-    
     lengths = [up for up in range(3,21,2)] + [down for down in range(20,3,-2)]
-    pyramid_list = []
-
-    for length in lengths:
-        r = requests.get(baseURL.format(length=length))
-        if r:
-            pyramid_list.append(r.text)
-        else:
-            print("failed a request", r.status_code, length)
-
-    return pyramid_list
+    return list_of_words_with_lengths(lengths)
 
 
 def get_a_word_of_length_n(length):
@@ -226,7 +214,7 @@ def list_of_words_with_lengths(list_of_lengths):
 
     url = "https://us-central1-waldenpondpress.cloudfunctions.net/give_me_a_word?wordlength={length}"
     wordList = []
-    for i in range(0,len(list_of_lengths)-1):
+    for i in range(0,len(list_of_lengths)):
         length = list_of_lengths[i]
         r = requests.get(url.format(length=length))
         wordList.append(r.text)
