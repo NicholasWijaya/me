@@ -204,8 +204,10 @@ def random_filler_text(number_of_words=200):
     my_dict = make_filler_text_dictionary()
     words = []
 
-    for word_count in range(number_of_words):
-        random_word = my_dict[random.randint(3,7)][random.randint(0,2)]
+    for word_counter in range(number_of_words):
+        word_length = random.randint(3,7)
+        word_index = random.randint(0,2)
+        random_word = my_dict[word_length][word_index]
         words.append(random_word)
     return " ".join(words)
 
@@ -230,19 +232,25 @@ def fast_filler(number_of_words=200):
     LOCAL = os.path.dirname(os.path.realpath(__file__)) # the context of this file
     fname = "/dict_racey.json"
     dict_path = LOCAL + fname
-    if os.path.isfile(dict_path) == False or os.access(dict_path,os.F_OK) == False or os.path.getsize(dict_path) == 0:
-        dict_json = json.dumps(make_filler_text_dictionary())
+
+    if os.path.isfile(dict_path) == False or \
+        os.access(dict_path,os.F_OK) == False or \
+        os.path.getsize(dict_path) == 0:
+
+        dict_json = json.dump(make_filler_text_dictionary())
         with open(dict_path,'w') as word_dict:
             word_dict.write(dict_json)           
             word_dict.close()
-            
-    dict_json = open(dict_path).read() 
-    my_dict = json.loads(dict_json)
-    corrected_dict = {int(k):v for k,v in my_dict.items()}
-    words = []
-    for _ in range(number_of_words):
-        random_word = corrected_dict[random.randint(3,7)][random.randint(0,2)]
-        words.append(random_word)
+    
+    words = []        
+    with open(dict_path,'r') as dict_json: 
+        my_dict = json.load(dict_json)
+        corrected_dict = {int(k):v for k,v in my_dict.items()}
+        
+        for word_counter in range(number_of_words):
+            random_word = corrected_dict[random.randint(3,7)][random.randint(0,2)]
+            words.append(random_word)
+        dict_json.close()
     final_str = " ".join(words).capitalize() + "."
     return final_str
 
