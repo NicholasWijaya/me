@@ -236,10 +236,8 @@ def fast_filler(number_of_words=200):
     if os.path.isfile(dict_path) == False or \
         os.access(dict_path,os.F_OK) == False or \
         os.path.getsize(dict_path) == 0:
-
-        dict_json = json.dump(make_filler_text_dictionary())
         with open(dict_path,'w') as word_dict:
-            word_dict.write(dict_json)           
+            json.dump(make_filler_text_dictionary(),word_dict)          
             word_dict.close()
     
     words = []        
